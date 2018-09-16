@@ -1,0 +1,13 @@
+- name: Install git
+  apt: name=git
+
+- name: Install nginx
+  apt: name=nginx
+
+- name: curl
+  apt: name=curl
+
+- name: Restaring the nginx service
+  service:
+    name: nginx
+    state: restarted
