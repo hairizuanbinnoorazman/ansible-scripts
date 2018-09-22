@@ -1,0 +1,25 @@
+- name: Install debian R dependencies
+  apt:
+    name: "{{ packages }}"
+    update_cache: yes
+  vars:
+    packages:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg2
+      - software-properties-common
+
+- name: Adding the stable R apt repo
+  shell: add-apt-repository "deb http://cran.rstudio.com/bin/linux/debian stretch-cran35/"
+
+- name: Adding stable R keys to be able to securely download apt
+  shell: apt-key adv --keyserver keys.gnupg.net --recv-key 'E19F5F87128899B192B1A2C2AD5F960A256A04AF'
+
+- name: Install R
+  apt:
+    name: "{{ packages }}"
+    update_cache: yes
+  vars:
+    packages:
+      - r-base

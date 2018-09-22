@@ -1,0 +1,13 @@
+- name: Install Rstudio server dependencies
+  apt:
+    name: "{{ packages }}"
+    update_cache: yes
+  vars:
+    packages:
+      - gdebi-core
+
+- name: Download rstudio binaries
+  shell: wget https://download2.rstudio.org/rstudio-server-stretch-1.1.456-amd64.deb
+
+- name: Extract and install rstudio server
+  shell: sudo gdebi -n rstudio-server-stretch-1.1.456-amd64.deb
