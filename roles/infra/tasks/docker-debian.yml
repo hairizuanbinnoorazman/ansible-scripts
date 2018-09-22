@@ -1,0 +1,41 @@
+- name: Install docker dependencies
+  apt:
+    name: "{{ packages }}"
+    update_cache: yes
+  vars:
+    packages:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg2
+      - software-properties-common
+  tags:
+    - docker
+
+- name: Add gpg key to install docker
+  shell: curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
+  tags:
+    - docker
+
+- name: Fingerprint step
+  shell: apt-key fingerprint 0EBFCD88
+  tags:
+    - docker
+
+- name: Add apt-repository step
+  shell: add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
+  tags:
+    - docker
+
+- name: Install docker
+  apt:
+    name: docker-ce
+    update_cache: yes
+  tags:
+    - docker
+
+- name: Add user to docker group
+  shell: usermod -aG docker {{ user }}
+  when: user is defined
+  tags:
+    - docker
