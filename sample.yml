@@ -4,3 +4,10 @@
 
   roles:
     - sample
+
+- name: Testing values across plays
+  hosts: local
+  connection: local
+
+  roles:
+    - sample2
