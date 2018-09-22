@@ -50,7 +50,13 @@ ssh {name}@{ip address of instance-1}
 Add the ip address to the hosts file under docker. Then, run the following command
 
 ```bash
-ansible-playbook infra.yml --tags installDocker -e "user={ add the name being used to ssh into instance-1 here }" -i hosts
+ansible-playbook infra.yml --tags docker -e "user={ add the name being used to ssh into instance-1 here }" -i hosts
+```
+
+We can extend it further by also installing docker-compose as well
+
+```bash
+ansible-playbook infra.yml --tags docker,docker-compose -e "user={ add the name being used to ssh into instance-1 here }" -i hosts
 ```
 
 We can then `ssh` into the service and run our various docker commands
