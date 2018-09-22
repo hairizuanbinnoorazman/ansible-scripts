@@ -3,6 +3,8 @@
 
 [docker]
 
+[docker-compose]
+
 [dockerswarm-manager]
 
 [dockerswarm-worker]
@@ -10,5 +12,9 @@
 [kubernetes-master]
 
 [kubernetes-worker]
+
+[r]
+
+[rstudio-server]
 
 
