@@ -34,7 +34,10 @@ It is possible to just go for a container optimized google VM but let's just com
 ```bash
 # Create instance
 # It might be necessary to add --project and other flags if you're working across projects
-gcloud beta compute instances create instance-1 --zone=us-central1-c --machine-type=n1-standard-1 --subnet=default --tags=http-server,https-server --image=debian-9-stretch-v20180911 --image-project=debian-cloud --boot-disk-size=10GB --boot-disk-type=pd-standard --boot-disk-device-name=instance-1
+gcloud beta compute instances create instance-2 --zone=us-central1-c --machine-type=n1-standard-1 --subnet=default --tags=http-server,https-server --image=debian-9-stretch-v20180911 --image-project=debian-cloud --boot-disk-size=10GB --boot-disk-type=pd-standard --boot-disk-device-name=instance-2
+
+# Another option is to create a ubuntu instance instead
+gcloud beta compute instances create instance-1 --zone=us-central1-c --machine-type=n1-standard-1 --subnet=default --tags=http-server,https-server --image=ubuntu-1604-xenial-v20180912 --image-project=ubuntu-os-cloud --boot-disk-size=10GB --boot-disk-type=pd-standard --boot-disk-device-name=instance-1
 
 # SSH into instance
 # Sets up ssh keys for you both locally and on the remote-machine
@@ -56,12 +59,12 @@ ansible-playbook infra.yml --tags docker -e "user={ add the name being used to s
 We can extend it further by also installing docker-compose as well
 
 ```bash
-ansible-playbook infra.yml --tags docker,docker-compose -e "user={ add the name being used to ssh into instance-1 here }" -i hosts
+ansible-playbook infra.yml -e "user={ add the name being used to ssh into instance-1 here }" -e "docker_user={ your dockerhub username }" -e "docker_pw={ your password on dockerhub for the account specified }" -i hosts
 ```
 
 We can then `ssh` into the service and run our various docker commands
 
-For cleaaning up:
+For cleaning up:
 
 ```
 gcloud compute instances delete instance-1
