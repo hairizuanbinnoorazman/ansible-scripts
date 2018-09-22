@@ -21,6 +21,16 @@
     msg: "Testing tags with dash"
   tags: debug-dash
 
+- name: Group names
+  debug:
+    msg: "Group names: {{ group_names, }}"
+  tags: debug
+
+- name: Group names
+  shell: ls
+  register: testvalue
+  tags: debug
+
 - name: Install git
   apt:
     name: git

@@ -1,0 +1,18 @@
+- name: Group names
+  shell: "echo {{ testvalue }}"
+  tags: debug
+
+- name: Printing of register value across multiple roles
+  debug:
+    msg: "Value of testvalue: {{ testvalue }}"
+  tags: debug
+
+- name: Printing of register value across multiple roles
+  debug:
+    msg: "Value of ansible variables: {{ hostvars[inventory_hostname]['testvalue'] }}"
+  tags: debug
+
+- name: Printing of ip address for one of the groups
+  debug:
+    msg: "Value of ansible variables: {{ hostvars[groups['local'][0]]['testvalue'] }}"
+  tags: debug
