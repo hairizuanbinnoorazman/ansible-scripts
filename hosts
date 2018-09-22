@@ -1,4 +1,14 @@
 [local]
 127.0.0.1
 
+[docker]
+
+[dockerswarm-manager]
+
+[dockerswarm-worker]
+
+[kubernetes-master]
+
+[kubernetes-worker]
+
 
