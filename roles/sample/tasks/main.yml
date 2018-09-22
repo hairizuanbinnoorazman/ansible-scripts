@@ -1,12 +1,18 @@
-- name: Debug
+- name: Debug custom name defined on cli
   debug:
     msg: "Debugging value: {{ name }}"
   tags:
     - debug
 
-- name: Debug
+- name: Debug using ansible distribution
   debug:
     msg: "Debugging value: {{ hostvars[inventory_hostname].ansible_distribution|lower }} {{ hostvars[inventory_hostname].ansible_distribution_version }}"
+  tags:
+    - debug
+
+- name: Debug includes
+  include: include-{{ hostvars[inventory_hostname].ansible_distribution|lower }}.yml
+  when: ansible_distribution|lower == "macosx"
   tags:
     - debug
 
