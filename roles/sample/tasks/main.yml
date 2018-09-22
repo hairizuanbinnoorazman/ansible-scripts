@@ -1,0 +1,28 @@
+- name: Debug
+  debug:
+    msg: "Debugging value: {{ name }}"
+  tags:
+    - debug
+
+- name: Debug
+  debug:
+    msg: "Debugging value: {{ hostvars[inventory_hostname].ansible_distribution|lower }} {{ hostvars[inventory_hostname].ansible_distribution_version }}"
+  tags:
+    - debug
+
+- name: Install git
+  apt:
+    name: git
+
+# - name: Install nginx
+#   apt:
+#     name: nginx
+
+- name: curl
+  apt:
+    name: curl
+
+# - name: Restaring the nginx service
+#   service:
+#     name: nginx
+#     state: restarted
