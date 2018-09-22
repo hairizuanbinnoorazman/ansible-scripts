@@ -3,4 +3,45 @@
   become: true
 
   roles:
-    - infra
+    - docker
+
+- name: Install docker and docker compose on multiple nodes
+  hosts: docker-compose
+  become: true
+
+  roles:
+    - docker
+    - docker-compose
+
+- name: Install docker swarm master
+  hosts: dockerswarm-manager
+  become: true
+
+  roles:
+    - docker
+    - docker-compose
+    - docker-swarm-manager
+
+- name: Install docker swarm worker
+  hosts: dockerswarm-worker
+  become: true
+
+  roles:
+    - docker
+    - docker-compose
+    - docker-swarm-worker
+
+- name: Install R
+  hosts: r
+  become: true
+
+  roles:
+    - r
+
+- name: Install Rstudio server
+  hosts: rstudio-server
+  become: true
+
+  roles:
+    - r
+    - rstudio-server
