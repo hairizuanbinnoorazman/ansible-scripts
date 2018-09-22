@@ -1,0 +1,5 @@
+- name: Debug custom name defined on cli
+  debug:
+    msg: "Include successful"
+  tags:
+    - debug

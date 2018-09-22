@@ -10,11 +10,16 @@
   tags:
     - debug
 
-- name: Debug includes
+- name: Debug includes other task file
   include: include-{{ hostvars[inventory_hostname].ansible_distribution|lower }}.yml
   when: ansible_distribution|lower == "macosx"
   tags:
     - debug
+
+- name: Debug testing tags with dash in them
+  debug:
+    msg: "Testing tags with dash"
+  tags: debug-dash
 
 - name: Install git
   apt:
