@@ -1,0 +1,6 @@
+- name: Install docker on multiple nodes
+  hosts: docker
+  become: true
+
+  roles:
+    - infra
