@@ -1,21 +1,33 @@
 - name: Get docker swarm manager ip address
   shell: hostname -i
   register: swarm-manager-ip
+  tags:
+    - docker-swarm
 
 - name: Initialize docker swarm
   shell: docker swarm init --advertise-addr {{ swarm-manager-ip.stdout }}
+  tags:
+    - docker-swarm
 
 - name: Get docker swarm manager init
   shell: docker swarm join-token -q worker
   register: swarm-manager-token
+  tags:
+    - docker-swarm
 
 - name: Get docker workers to join
   shell: docker swarm join --token {{ swarm-manager-token.stdout }}:2377
+  tags:
+    - docker-swarm
 
 - name: Get docker node list
   shell: docker node list
   register: docker-node-list
+  tags:
+    - docker-swarm
 
 - name: Print out the list of docker nodes available for use
   debug:
     var: docker-node-list
+  tags:
+    - docker-swarm
