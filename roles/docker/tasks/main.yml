@@ -1,0 +1,13 @@
+- name: Check that certain variables are set before continuing
+  assert:
+    that:
+      - user is defined
+      - docker_user is defined
+      - docker_pw is defined
+
+- name: Install docker
+  include_tasks: docker-{{ hostvars[inventory_hostname].ansible_distribution|lower }}.yml
+  when: ansible_distribution|lower == 'debian' or ansible_distribution|lower == 'ubuntu'
+
+- name: Login to docker hub
+  shell: docker login -u {{ docker_user }} -p {{ docker_pw }}

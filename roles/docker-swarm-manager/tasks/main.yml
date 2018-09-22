@@ -1,0 +1,22 @@
+- name: Get docker swarm manager ip address
+  shell: hostname -i
+  register: swarm_manager_ip
+
+- name: Leave the swarm before the initializing it again
+  shell: docker swarm leave --force
+  ignore_errors: yes
+
+- name: Initialize docker swarm
+  shell: "docker swarm init --advertise-addr {{ swarm_manager_ip.stdout }}"
+
+- name: Print value of swarm_manager_ip
+  debug:
+    msg: "Print value of swarm-manager-ip: {{ swarm_manager_ip.stdout }}"
+
+- name: Get docker swarm manager init
+  shell: docker swarm join-token -q worker
+  register: swarm_manager_token
+
+- name: Print value of swarm_manager_token
+  debug:
+    msg: "Print value of swarm-manager-ip: {{ swarm_manager_token.stdout }}"

@@ -1,0 +1,10 @@
+- name: Get docker workers to join
+  shell: "docker swarm join --token {{ hostvars[groups['dockerswarm-manager'][0]]['swarm_manager_token'].stdout }} {{ hostvars[groups['dockerswarm-manager'][0]]['swarm_manager_ip'].stdout }}:2377"
+
+# - name: Get docker node list
+#   shell: sleep 10s && docker node list
+#   register: docker_node_list
+
+# - name: Print out the list of docker nodes available for use
+#   debug:
+#     var: docker_node_lists
