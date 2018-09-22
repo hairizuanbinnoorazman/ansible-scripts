@@ -1,6 +1,12 @@
 # Scripts for automating server provision
 
-Contains some of the common commands to be able to provisions servers rather than ssh-ing in and run the commands over and over again across multiple servers. In some of the cases, we would want to run
+Contains some of the common commands to be able to provisions servers rather than ssh-ing in and run the commands over and over again across multiple servers. Here is a list of some of the possible things that can be setup from the following ansible scripts:
+
+- r
+- rstudio server
+- docker
+- docker with docker-compose
+- docker swarm
 
 # Setting this up locally
 
