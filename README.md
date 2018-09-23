@@ -8,6 +8,12 @@ Contains some of the common commands to be able to provisions servers rather tha
 - docker with docker-compose
 - docker swarm
 
+Future infra pieces:
+
+- jenkins
+- kubernetes
+- ansible (on server)
+
 # Setting this up locally
 
 Setting up python virtual environment for this
