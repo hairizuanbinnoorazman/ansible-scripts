@@ -62,7 +62,7 @@ gcloud compute instances list
 ssh {name}@{ip address of instance-1}
 ```
 
-Add the ip address to the hosts file under docker. Then, run the following command
+Add the ip address to the hosts file under docker. Then, run the following command.
 
 ```bash
 ansible-playbook infra.yml --tags docker -e "user={ add the name being used to ssh into instance-1 here }" -i hosts
@@ -81,3 +81,9 @@ For cleaning up:
 ```
 gcloud compute instances delete instance-1
 ```
+
+Notes: In the case where hosts use password to authenticate instead of ssh keys.
+
+- Install the following: sshpass
+- Use host `{host ip} ansible_connection=ssh ansible_ssh_user={user} ansible_ssh_pass={pw}`
+- If sudo need password... add an extra param to the cmd: `ansible_sudo_pass={pw}` to use password for authentication
