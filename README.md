@@ -2,17 +2,14 @@
 
 Contains some of the common commands to be able to provisions servers rather than ssh-ing in and run the commands over and over again across multiple servers. Here is a list of some of the possible things that can be setup from the following ansible scripts:
 
-- r
-- rstudio server
-- docker
-- docker with docker-compose
-- docker swarm
-
-Future infra pieces:
-
-- jenkins
-- kubernetes
-- ansible (on server)
+- [ ] ansible (on server)
+- [x] docker
+- [x] docker with docker-compose
+- [x] docker swarm
+- [x] r
+- [x] rstudio server
+- [ ] jenkins
+- [ ] kubernetes
 
 # Setting this up locally
 
