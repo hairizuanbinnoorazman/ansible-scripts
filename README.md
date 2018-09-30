@@ -8,9 +8,14 @@ Contains some of the common commands to be able to provisions servers rather tha
 - [x] docker swarm
 - [x] r
 - [x] rstudio server
+- [ ] r shiny server
 - [ ] jenkins
 - [ ] kubernetes
 - [ ] nginx server setup (with python app)
+- [ ] elasticsearch
+- [ ] logstash
+- [ ] filebeats
+- [ ] fluentd
 
 # Setting this up locally
 
