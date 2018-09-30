@@ -10,6 +10,7 @@ Contains some of the common commands to be able to provisions servers rather tha
 - [x] rstudio server
 - [ ] jenkins
 - [ ] kubernetes
+- [ ] nginx server setup (with python app)
 
 # Setting this up locally
 
