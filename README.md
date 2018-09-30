@@ -8,6 +8,7 @@ Contains some of the common commands to be able to provisions servers rather tha
 - [x] docker swarm
 - [x] r
 - [x] rstudio server
+- [ ] airflow
 - [ ] r shiny server
 - [ ] jenkins
 - [ ] kubernetes
@@ -16,6 +17,13 @@ Contains some of the common commands to be able to provisions servers rather tha
 - [ ] logstash
 - [ ] filebeats
 - [ ] fluentd
+- [ ] prometheus
+- [ ] mysql
+- [ ] postgresql
+- [ ] cassandra
+- [ ] couchdb
+- [ ] redis
+- [ ] redis cluster
 
 # Setting this up locally
 
