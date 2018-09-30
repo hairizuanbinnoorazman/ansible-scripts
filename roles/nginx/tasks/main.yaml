@@ -1,0 +1,18 @@
+- name: Install nginx on server
+  apt:
+    name: "{{ packages }}"
+    update_cache: yes
+  vars:
+    packages:
+      - nginx
+
+- name: Generate an nginx configuration file on the server
+  template:
+    src: ../templates/nginx.conf.j2
+    dest: /etc/nginx/sites-available/api-nginx.conf
+
+- name: Create symlink of the configuration on the sites-enabled folder
+  shell: ln -s /etc/nginx/sites-available/api-nginx.conf /etc/nginx/sites-enabled/
+
+- name: Reload the nginx configuration
+  shell: systemctl reload nginx
