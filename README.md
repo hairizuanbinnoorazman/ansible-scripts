@@ -2,6 +2,12 @@
 
 Contains some of the common commands to be able to provisions servers rather than ssh-ing in and run the commands over and over again across multiple servers. Here is a list of some of the possible things that can be setup from the following ansible scripts:
 
+A few additional notes:
+
+- For some of the components, especially databases, it might good to also add cron jobs and scripts to do automated backups of the data to relevant data stores
+
+**Components**
+
 - [ ] ansible (on server)
 - [x] docker
 - [x] docker with docker-compose
