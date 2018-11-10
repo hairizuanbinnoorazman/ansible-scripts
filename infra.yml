@@ -80,3 +80,10 @@
   roles:
     - java
     - elasticsearch
+
+- name: Install python 3
+  hosts: python3
+  become: true
+
+  roles:
+    - python3
