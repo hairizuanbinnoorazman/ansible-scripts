@@ -1,0 +1,5 @@
+- name: Download filebeat
+  shell: curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-6.4.3-x86_64.rpm
+
+- name: Install filebeat
+  shell: sudo rpm -vi filebeat-6.4.3-x86_64.rpm
