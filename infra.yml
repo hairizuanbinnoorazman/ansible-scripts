@@ -72,3 +72,11 @@
 
   roles:
     - java
+
+- name: Install elasticsearch
+  hosts: elasticsearch
+  become: true
+
+  roles:
+    - java
+    - elasticsearch
