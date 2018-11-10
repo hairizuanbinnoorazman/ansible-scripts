@@ -30,6 +30,9 @@ A few additional notes:
 - [ ] couchdb
 - [ ] redis
 - [ ] redis cluster
+- [ ] etcd
+- [ ] consul
+- [ ] zookeeper
 
 # Setting this up locally
 
