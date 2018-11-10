@@ -1,0 +1,7 @@
+- name: Install zookeeper on server
+  apt:
+    name: "{{ packages }}"
+    update_cache: yes
+  vars:
+    packages:
+      - zookeeper
