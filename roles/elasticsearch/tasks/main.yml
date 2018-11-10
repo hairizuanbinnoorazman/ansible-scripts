@@ -19,3 +19,8 @@
   vars:
     packages:
       - elasticsearch
+
+- name: Ensure that elasticsearch is running
+  systemd:
+    state: started
+    name: elasticsearch
