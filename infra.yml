@@ -45,3 +45,23 @@
   roles:
     - r
     - rstudio-server
+
+- name: Install consul
+  hosts: consul
+  become: true
+
+  environment:
+    PATH: "{{ ansible_env.PATH }}:/opt"
+
+  roles:
+    - consul
+
+- name: Install nats
+  hosts: nats
+  become: true
+
+  environment:
+    PATH: "{{ ansible_env.PATH }}:/opt"
+
+  roles:
+    - nats
