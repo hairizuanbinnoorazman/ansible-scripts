@@ -2,10 +2,10 @@
   shell: wget https://github.com/nats-io/gnatsd/releases/download/v0.9.4/gnatsd-v0.9.4-linux-amd64.zip
 
 - name: Unzip nats onto server
-  shell: unzip -p gnatsd-v0.9.4-linux-amd64.zip gnatsd-v0.9.4-linux-amd64/gnatsd > gnatsd
+  shell: unzip -p gnatsd-v0.9.4-linux-amd64.zip gnatsd-v0.9.4-linux-amd64/gnatsd > /opt/gnatsd
 
 - name: Make nats executable
   shell: chmod +x gnatsd
 
 - name: Run nats
-  shell: ./gnatsd
+  shell: gnatsd
