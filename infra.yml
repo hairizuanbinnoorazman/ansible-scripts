@@ -65,3 +65,10 @@
 
   roles:
     - nats
+
+- name: Install java
+  hosts: java
+  become: true
+
+  roles:
+    - java
