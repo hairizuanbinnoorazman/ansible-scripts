@@ -3,3 +3,8 @@
 
 - name: Install filebeat
   shell: sudo dpkg -i filebeat-6.4.3-amd64.deb
+
+- name: Ensure that elasticsearch is running
+  systemd:
+    state: started
+    name: elasticsearch
