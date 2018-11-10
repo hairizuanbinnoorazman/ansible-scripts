@@ -1,0 +1,7 @@
+- name: Install mysql on server
+  apt:
+    name: "{{ packages }}"
+    update_cache: yes
+  vars:
+    packages:
+      - mysql-server
