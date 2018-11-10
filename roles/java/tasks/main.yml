@@ -1,0 +1,3 @@
+- name: Install java
+  include_tasks: java-debian.yml
+  when: ansible_distribution|lower == 'debian' or ansible_distribution|lower == 'ubuntu'

@@ -1,0 +1,7 @@
+- name: Install java on debian
+  apt:
+    name: "{{ packages }}"
+    update_cache: yes
+  vars:
+    packages:
+      - openjdk-8-jre
