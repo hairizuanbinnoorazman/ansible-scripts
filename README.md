@@ -19,7 +19,7 @@ A few additional notes:
 - [ ] jenkins
 - [ ] kubernetes
 - [ ] nginx server setup (with python app)
-- [ ] elasticsearch
+- [x] elasticsearch
 - [ ] logstash
 - [ ] filebeats
 - [ ] fluentd
@@ -33,8 +33,10 @@ A few additional notes:
 - [ ] etcd
 - [ ] consul
 - [ ] zookeeper
-- [ ] java
+- [x] java
 - [ ] kafka
+- [x] nats
+- [ ] python
 
 # Setting this up locally
 
