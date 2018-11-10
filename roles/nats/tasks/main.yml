@@ -5,7 +5,32 @@
   shell: unzip -p gnatsd-v0.9.4-linux-amd64.zip gnatsd-v0.9.4-linux-amd64/gnatsd > /opt/gnatsd
 
 - name: Make nats executable
-  shell: chmod +x gnatsd
+  shell: chmod +x /opt/gnatsd
 
-- name: Run nats
-  shell: gnatsd
+- name: Check that nats configuration directory is available for use
+  file:
+    path: /etc/opt/nats
+    state: directory
+    recurse: true
+
+- name: Add the user 'nats'
+  user:
+    name: nats
+
+- name: Generate an nats configuration file on the server
+  template:
+    src: ../templates/gnatsd.config.j2
+    dest: /etc/opt/nats/gnatsd.config
+
+- name: Generate a nats configuration to be run by systemd
+  template:
+    src: ../templates/nats.service.j2
+    dest: /etc/systemd/system/nats.service
+
+- name: Run nats as a service
+  shell: systemctl start nats
+
+- name: Ensure that nats is running
+  systemd:
+    state: started
+    name: nats
