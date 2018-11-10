@@ -1,8 +1,24 @@
+- name: Install unzip utility
+  apt:
+    name: "{{ packages }}"
+    update_cache: yes
+  vars:
+    packages:
+      - unzip
+
 - name: Download consul
   shell: curl -L -O https://releases.hashicorp.com/consul/1.3.0/consul_1.3.0_linux_amd64.zip
 
 - name: Move consul
   shell: unzip -p consul_1.3.0_linux_amd64.zip > /opt/consul
 
+- name: Ensure consul is executable before running it
+  shell: chmod +x /opt/consul
+
 - name: Ensuring consul is runnable - check consul version
   shell: consul -v
+  register: consul_shell_version
+
+- name: Print out consul shell output for to ensure output is right
+  debug:
+    var: consul_shell_version.stdout_lines
