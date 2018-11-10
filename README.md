@@ -33,6 +33,8 @@ A few additional notes:
 - [ ] etcd
 - [ ] consul
 - [ ] zookeeper
+- [ ] java
+- [ ] kafka
 
 # Setting this up locally
 
