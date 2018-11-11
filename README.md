@@ -6,37 +6,55 @@ A few additional notes:
 
 - For some of the components, especially databases, it might good to also add cron jobs and scripts to do automated backups of the data to relevant data stores
 
-**Components**
+# Components
 
-- [ ] ansible (on server)
-- [x] docker
-- [x] docker with docker-compose
-- [x] docker swarm
+## Language Runtimes
+
 - [x] r
-- [x] rstudio server
-- [ ] airflow
-- [ ] r shiny server
-- [ ] jenkins
-- [ ] kubernetes
-- [ ] nginx server setup (with python app)
-- [x] elasticsearch
-- [ ] logstash
-- [ ] filebeats
-- [ ] fluentd
-- [ ] prometheus
+- [x] python3
+- [x] java
+
+## Databases
+
 - [ ] mysql
 - [ ] postgresql
 - [ ] cassandra
 - [ ] couchdb
 - [ ] redis
 - [ ] redis cluster
+- [x] elasticsearch
+- [ ] cockroachdb
+
+## Application Services
+
+- [x] rstudio server
+- [ ] r shiny server
+- [ ] airflow
+- [ ] jenkins
+- [ ] ansible (on server)
+- [ ] nginx server setup (with python app)
+
+## Logging/Monitoring Services (Part of logging stack)
+
+- [ ] logstash
+- [ ] filebeats
+- [ ] fluentd
+- [ ] prometheus
+
+## Messaging Services
+
+- [ ] kafka
+- [x] nats
+
+## Microservice tooling
+
+- [x] docker
+- [x] docker with docker-compose
+- [x] docker swarm
+- [ ] kubernetes
 - [ ] etcd
 - [ ] consul
 - [ ] zookeeper
-- [x] java
-- [ ] kafka
-- [x] nats
-- [x] python3
 
 # Setting this up locally
 
