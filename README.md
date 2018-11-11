@@ -36,7 +36,7 @@ A few additional notes:
 - [x] java
 - [ ] kafka
 - [x] nats
-- [ ] python
+- [x] python3
 
 # Setting this up locally
 
