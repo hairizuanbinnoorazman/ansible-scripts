@@ -1,0 +1,6 @@
+- name: Unarchive kafka binary
+  unarchive:
+    src: https://www-us.apache.org/dist/kafka/2.0.0/kafka_2.11-2.0.0.tgz
+    dest: /opt/kafka
+    remote_src: yes
+    mode: +x
