@@ -1,0 +1,13 @@
+- name: Add couchdb repo
+  shell: echo "deb https://apache.bintray.com/couchdb-deb {distribution} main" | sudo tee -a /etc/apt/sources.list
+
+- name: Add couchdb repo key
+  shell: curl -L https://couchdb.apache.org/repo/bintray-pubkey.asc | sudo apt-key add -
+
+- name: Install couchdb
+  apt:
+    name: "{{ packages }}"
+    update_cache: yes
+  vars:
+    packages:
+      - couchdb
