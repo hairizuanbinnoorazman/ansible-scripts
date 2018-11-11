@@ -1,0 +1,10 @@
+[Unit]
+Description=Prometheus
+
+[Service]
+ExecStart=/opt/prometheus --config.file=prometheus.yml 
+User=prometheus
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
