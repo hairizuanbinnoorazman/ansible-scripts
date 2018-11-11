@@ -1,0 +1,11 @@
+- name: Unarchive kafka binary
+  unarchive:
+    src: http://download.redis.io/releases/redis-5.0.0.tar.gz
+    dest: /opt/redis
+    remote_src: yes
+    mode: +x
+
+- name: Generate a redis configuration to be run by systemd
+  template:
+    src: ../templates/redis.service.j2
+    dest: /etc/systemd/system/redis.service

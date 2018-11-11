@@ -1,0 +1,10 @@
+[Unit]
+Description=Redis
+
+[Service]
+ExecStart=/opt/redis-server
+User=redis
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
