@@ -1,0 +1,22 @@
+- name: Create virtual environment for airflow
+  shell: virtualenv airflow
+
+- name: Run the command to run airflow
+  shell: source ./airflow/bin/activate
+
+- name: Add the user 'airflow'
+  user:
+    name: airflow
+
+- name: Install airflow
+  environment:
+    SLUGIFY_USES_TEXT_UNIDECODE: "yes"
+  shell: pip install apache-airflow
+
+- name: Initialize database
+  shell: airflow initdb
+
+- name: Generate a airflow configuration to be run by systemd
+  template:
+    src: ../templates/airflow.service.j2
+    dest: /etc/systemd/system/airflow.service

@@ -1,0 +1,10 @@
+[Unit]
+Description=Airflow Webserver
+
+[Service]
+ExecStart=airflow webserver -p 8080
+User=airflow
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
