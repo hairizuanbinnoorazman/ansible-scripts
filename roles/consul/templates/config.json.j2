@@ -1,0 +1,9 @@
+{
+  "data_dir": "/tmp/consul",
+  "server": true,
+  "bootstrap_expect": {{ num_consul_hosts }},
+  "log_level": "info",
+  "ui": true,
+  "client_addr": "0.0.0.0",
+  "retry_join": ["{{ consul_server_ip_address.stdout }}"]
+}
