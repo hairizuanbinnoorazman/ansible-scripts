@@ -49,10 +49,8 @@
 - name: Install consul
   hosts: consul
   become: true
-
-  environment:
-    PATH: "{{ ansible_env.PATH }}:/opt"
-
+  vars:
+    num_consul_hosts: "{{ groups['consul'] | length }}"
   roles:
     - consul
 
