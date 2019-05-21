@@ -1,3 +1,8 @@
+- name: Get IP address of first host in consul group
+  shell: hostname -i
+  register: consul_server_ip_address
+  run_once: true
+
 - name: Install unzip utility
   apt:
     name: "{{ packages }}"
@@ -6,14 +11,18 @@
     packages:
       - unzip
 
-- name: Download consul
-  shell: curl -L -O https://releases.hashicorp.com/consul/1.3.0/consul_1.3.0_linux_amd64.zip
+# Move the following steps to install.yml file
+# - name: Download consul
+#   shell: curl -L -O https://releases.hashicorp.com/consul/1.3.0/consul_1.3.0_linux_amd64.zip
 
-- name: Move consul
-  shell: unzip -p consul_1.3.0_linux_amd64.zip > /opt/consul
+# - name: Move consul
+#   shell: unzip -p consul_1.3.0_linux_amd64.zip > /usr/local/bin/consul
 
-- name: Ensure consul is executable before running it
-  shell: chmod +x /opt/consul
+# - name: Remove consul zip file
+#   shell: rm consul_1.3.0_linux_amd64.zip
+
+# - name: Ensure consul is executable before running it
+#   shell: chmod +x /usr/local/bin/consul
 
 - name: Ensuring consul is runnable - check consul version
   shell: consul -v
@@ -22,3 +31,39 @@
 - name: Print out consul shell output for to ensure output is right
   debug:
     var: consul_shell_version.stdout_lines
+
+- name: Add the user 'consul'
+  user:
+    name: consul
+
+- name: Create the consul configuration folder if it doesn't exist
+  file:
+    path: /etc/consul.d
+    state: directory
+    mode: "0755"
+    owner: consul
+    group: consul
+
+- name: Create the consul data folder if it doesn't exist
+  file:
+    path: /tmp/consul
+    state: directory
+    mode: "0777"
+    owner: consul
+    group: consul
+
+- name: Generate a consul configuration to be run by systemd
+  template:
+    src: ../templates/config.json.j2
+    dest: /etc/consul.d/config.json
+
+- name: Generate a consul systemctl configuration to be run by systemd
+  template:
+    src: ../templates/consul.service.j2
+    dest: /etc/systemd/system/consul.service
+
+- name: Ensure that consul is running
+  systemd:
+    daemon_reload: yes
+    state: restarted
+    name: consul
