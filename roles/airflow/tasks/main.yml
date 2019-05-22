@@ -11,7 +11,9 @@
 - name: Install airflow
   environment:
     SLUGIFY_USES_TEXT_UNIDECODE: "yes"
-  shell: pip install apache-airflow
+  pip:
+    name:
+      - apache-airflow
 
 - name: Initialize database
   shell: airflow initdb
