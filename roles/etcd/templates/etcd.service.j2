@@ -1,0 +1,10 @@
+[Unit]
+Description=Etcd
+
+[Service]
+ExecStart=/usr/local/bin/etcd --config-file=/etc/etcd/config.yaml
+User=etcd
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

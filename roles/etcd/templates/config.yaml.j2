@@ -1,0 +1,8 @@
+name: {{ hostname.stdout }}
+initial-advertise-peer-urls: http://{{ host_ip_addr.stdout }}:2380
+listen-peer-urls: http://{{ host_ip_addr.stdout }}:2380
+listen-client-urls: http://{{ host_ip_addr.stdout }}:2379,http://127.0.0.1:2379
+advertise-client-urls: http://{{ host_ip_addr.stdout }}:2379
+initial-cluster-token: etcd-cluster
+initial-cluster: {{ etcd_peer_list }}
+initial-cluster-state: new

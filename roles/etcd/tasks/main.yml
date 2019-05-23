@@ -1,8 +1,57 @@
+- name: Get hostname to be used as name for etcd node
+  shell: hostname
+  register: hostname
+
+- name: Get host ip address to be used as name for etcd node
+  shell: hostname -i
+  register: host_ip_addr
+
+- name: Get manipulated string for combining to add to etcd config
+  shell: echo $(hostname)=$(hostname -i):2380
+  register: etcd_node_host_port
+
+- name: Get full etcd peer list as string
+  set_fact:
+    etcd_peer_list: "{{ ansible_play_hosts | map('extract', hostvars, 'etcd_node_host_port') | map(attribute='stdout') | list | join(',') }}"
+  run_once: yes
+
+- name: Debug peer list
+  debug:
+    msg: "{{ etcd_peer_list }}"
+
 - name: Downloading etcd
   shell: curl -L -O https://github.com/etcd-io/etcd/releases/download/v3.3.10/etcd-v3.3.10-linux-amd64.tar.gz
 
 - name: Move binary over to opt folder
-  shell: tar xzvf ./etcd-v3.3.10-linux-amd64.tar.gz -C /opt/etcd --strip-components=1
+  shell: tar xzvf ./etcd-v3.3.10-linux-amd64.tar.gz -C /usr/local/bin --strip-components=1
 
 - name: Allow etcd to be executable
-  shell: chmod +x /opt/etcd
+  shell: chmod +x /usr/local/bin
+
+- name: Add the user 'etcd'
+  user:
+    name: etcd
+
+- name: Create the etcd configuration folder if it doesn't exist
+  file:
+    path: /etc/etcd
+    state: directory
+    mode: "0755"
+    owner: etcd
+    group: etcd
+
+- name: Generate a etcd configuration
+  template:
+    src: ../templates/config.yaml.j2
+    dest: /etc/etcd/config.yaml
+
+- name: Generate a etcd systemctl configuration to be run by systemd
+  template:
+    src: ../templates/etcd.service.j2
+    dest: /etc/systemd/system/etcd.service
+
+- name: Ensure that etcd is running
+  systemd:
+    daemon_reload: yes
+    state: restarted
+    name: etcd
