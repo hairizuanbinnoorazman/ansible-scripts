@@ -8,4 +8,7 @@
       - python3-pip
 
 - name: Install pipenv dependency packages
-  shell: pip3 install pipenv virtualenv
+  pip:
+    name:
+      - pipenv
+      - virtualenv
