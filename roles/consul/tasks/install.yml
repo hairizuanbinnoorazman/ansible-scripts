@@ -1,0 +1,11 @@
+- name: Download consul
+  shell: curl -L -O https://releases.hashicorp.com/consul/1.3.0/consul_1.3.0_linux_amd64.zip
+
+- name: Move consul
+  shell: unzip -p consul_1.3.0_linux_amd64.zip > /usr/local/bin/consul
+
+- name: Remove consul zip file
+  shell: rm consul_1.3.0_linux_amd64.zip
+
+- name: Ensure consul is executable before running it
+  shell: chmod +x /usr/local/bin/consul

@@ -11,18 +11,13 @@
     packages:
       - unzip
 
-# Move the following steps to install.yml file
-# - name: Download consul
-#   shell: curl -L -O https://releases.hashicorp.com/consul/1.3.0/consul_1.3.0_linux_amd64.zip
+- name: Check that the consul binary exists
+  stat:
+    path: /usr/local/bin/consul
+  register: consul_bin
 
-# - name: Move consul
-#   shell: unzip -p consul_1.3.0_linux_amd64.zip > /usr/local/bin/consul
-
-# - name: Remove consul zip file
-#   shell: rm consul_1.3.0_linux_amd64.zip
-
-# - name: Ensure consul is executable before running it
-#   shell: chmod +x /usr/local/bin/consul
+- include_tasks: install.yml
+  when: consul_bin.stat.exists == false
 
 - name: Ensuring consul is runnable - check consul version
   shell: consul -v
