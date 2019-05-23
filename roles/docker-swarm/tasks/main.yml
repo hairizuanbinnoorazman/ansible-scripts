@@ -1,0 +1,30 @@
+- name: Get docker swarm manager ip address
+  shell: hostname -i
+  register: swarm_manager_ip
+  run_once: true
+
+- name: Get swarm mode
+  shell: docker info -f '{{ '{{' }} .Swarm.LocalNodeState {{ '}}' }}'
+  register: swarm_state
+
+- name: Initialize docker swarm
+  shell: "docker swarm init --advertise-addr {{ swarm_manager_ip.stdout }}"
+  run_once: true
+  when: swarm_state.stdout != "active"
+
+# - name: Print value of swarm_manager_ip
+#   debug:
+#     msg: "Print value of swarm-manager-ip: {{ swarm_manager_ip.stdout }}"
+
+- name: Get docker swarm manager init
+  shell: docker swarm join-token -q worker
+  register: swarm_manager_token
+  run_once: true
+
+# - name: Print value of swarm_manager_token
+#   debug:
+#     msg: "Print value of swarm-manager-ip: {{ swarm_manager_token.stdout }}"
+
+- name: Get docker workers to join
+  shell: "docker swarm join --token {{ swarm_manager_token.stdout }} {{ swarm_manager_ip.stdout }}:2377"
+  when: inventory_hostname != ansible_play_hosts[0] and swarm_state.stdout != "active"
