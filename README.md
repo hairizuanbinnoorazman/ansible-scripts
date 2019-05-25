@@ -53,7 +53,7 @@ A few additional notes:
 - [x] docker swarm
 - [ ] kubernetes
 - [ ] etcd
-- [ ] consul
+- [x] consul
 - [ ] zookeeper
 
 # Setting this up locally
