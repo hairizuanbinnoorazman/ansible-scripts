@@ -13,23 +13,14 @@
     - docker
     - docker-compose
 
-- name: Install docker swarm master
-  hosts: dockerswarm-manager
+- name: Install docker-swarm
+  hosts: dockerswarm
   become: true
 
   roles:
     - docker
     - docker-compose
-    - docker-swarm-manager
-
-- name: Install docker swarm worker
-  hosts: dockerswarm-worker
-  become: true
-
-  roles:
-    - docker
-    - docker-compose
-    - docker-swarm-worker
+    - docker-swarm
 
 - name: Install R
   hosts: r
@@ -85,3 +76,24 @@
 
   roles:
     - python3
+
+- name: Install etcd
+  hosts: etcd
+  become: true
+
+  roles:
+    - etcd
+
+- name: Install monitoring agents
+  hosts: monitoring
+  become: true
+
+  roles:
+    - stackdriver-monitoring
+
+- name: Install logging agents
+  hosts: logging
+  become: true
+
+  roles:
+    - stackdriver-logging
