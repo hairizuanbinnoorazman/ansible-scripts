@@ -1,0 +1,19 @@
+- name: Download the shell script to download the monitoring agent script
+  get_url:
+    url: https://dl.google.com/cloudagents/install-monitoring-agent.sh
+    dest: /root/install-monitoring-agent.sh
+    mode: "0550"
+
+- name: Install the stackdriver monitoring agent
+  shell: /root/install-monitoring-agent.sh
+
+- name: Remove the stackdriver monitoring agent installation script
+  file:
+    path: /root/install-monitoring-agent.sh
+    state: absent
+
+- name: Restart the stackdriver-agent service
+  systemd:
+    daemon_reload: yes
+    state: restarted
+    name: stackdriver-agent
