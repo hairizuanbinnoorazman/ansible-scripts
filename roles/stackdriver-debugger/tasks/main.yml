@@ -1,0 +1,5 @@
+- name: Install the debugger golang lib
+  shell: go get -u cloud.google.com/go/cmd/go-cloud-debug-agent
+  environment:
+    PATH: '{{ ansible_env.PATH }}:/usr/local/go/bin:/home/{{ ansible_env.USER }}/go/bin'
+    GOPATH: /home/{{ ansible_env.USER }}/go
