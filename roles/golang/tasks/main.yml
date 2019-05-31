@@ -1,0 +1,21 @@
+- name: Install Git
+  apt:
+    name: "{{ packages }}"
+    update_cache: yes
+  vars:
+    packages:
+      - git
+
+- name: Download Golang
+  shell: curl -L -O https://dl.google.com/go/go{{ golang_version }}.linux-amd64.tar.gz
+
+- name: Install Golang
+  shell: tar -C /usr/local -xzf go{{ golang_version }}.linux-amd64.tar.gz
+
+- name: Add paths to profile.d
+  template:
+    src: ../templates/golang_env.sh
+    dest: /etc/profile.d/golang_env.sh
+
+
+
