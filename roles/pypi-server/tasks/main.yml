@@ -1,0 +1,13 @@
+- name: Install pipenv dependency packages
+  pip:
+    name:
+      - pypiserver
+
+- name: Add the user 'pypi-server'
+  user:
+    name: pypi-server
+
+- name: Generate a pypi-server configuration to be run by systemd
+  template:
+    src: ../templates/pypiserver.service.j2
+    dest: /etc/systemd/system/pypiserver.service

@@ -1,0 +1,10 @@
+[Unit]
+Description=Pypi-server
+
+[Service]
+ExecStart=pypi-server -p 8080 -P {{ pypi_htpass_file }} -a {{ pypi_operations | default("upload,download") }} ~/packages
+User=pypi-server
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
