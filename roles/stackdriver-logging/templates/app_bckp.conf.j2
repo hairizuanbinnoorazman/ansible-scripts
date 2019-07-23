@@ -1,0 +1,13 @@
+<source>
+  @type tail
+  path /var/log/generic-web-app.log
+  pos_file /var/log/td-agent/generic-web-app.log.pos
+  tag generic-web-app
+  read_from_head true
+
+  <parse>
+    @type none
+  </parse>
+</source>
+
+## Need to make the /var/log/generic-web-app.log file - permission issues

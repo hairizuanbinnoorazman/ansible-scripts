@@ -1,0 +1,16 @@
+<source>
+  @type systemd
+  tag user-app
+  path /var/log/journal
+  pos_file /var/log/td-agent/user-app.log.pos
+  filters [{ "_SYSTEMD_UNIT": "user-app.service" }]
+  read_from_head true
+</source>
+
+<filter user-app>
+  @type parser
+  key_name MESSAGE
+  <parse>
+    @type none
+  </parse>
+</filter>

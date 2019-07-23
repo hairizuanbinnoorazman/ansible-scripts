@@ -1,0 +1,16 @@
+<source>
+  @type systemd
+  tag generic-web-app
+  path /var/log/journal
+  pos_file /var/log/td-agent/generic-web-app.log.pos
+  filters [{ "_SYSTEMD_UNIT": "generic-web-app.service" }]
+  read_from_head true
+</source>
+
+<filter generic-web-app>
+  @type parser
+  key_name MESSAGE
+  <parse>
+    @type none
+  </parse>
+</filter>

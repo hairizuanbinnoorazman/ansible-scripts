@@ -1,0 +1,53 @@
+- name: Download the shell script to download the logging agent script
+  get_url:
+    url: https://dl.google.com/cloudagents/install-logging-agent.sh
+    dest: /root/install-logging-agent.sh
+    mode: "0550"
+
+- name: Install the stackdriver logging agent
+  shell: /root/install-logging-agent.sh
+
+- name: Remove the stackdriver monitoring agent installation script
+  file:
+    path: /root/install-logging-agent.sh
+    state: absent
+
+- name: Generate a generic web configuration to be run by systemd
+  template:
+    src: ../templates/app.conf.j2
+    dest: /etc/google-fluentd/config.d/generic-web-app.conf
+
+- name: Generate a user-app configuration to be run by systemd
+  template:
+    src: ../templates/user-app.conf.j2
+    dest: /etc/google-fluentd/config.d/user-app.conf
+
+- name: Generate a google fluentd configuration to be run by systemd
+  template:
+    src: ../templates/google-fluentd.conf.j2
+    dest: /etc/google-fluentd/google-fluentd.conf
+
+- name: Generate a journald configuration to be run by systemd
+  template:
+    src: ../templates/journald.conf.j2
+    dest: /etc/systemd/journald.conf
+
+- name: Create the var log journal folder if it doesn't exist
+  file:
+    path: /var/log/journal
+    state: directory
+    mode: "0755"
+    owner: root
+    group: root
+
+- name: Restart the journalctl service
+  systemd:
+    daemon_reload: yes
+    state: restarted
+    name: systemd-journald
+
+- name: Restart the google-fluentd service
+  systemd:
+    daemon_reload: yes
+    state: restarted
+    name: google-fluentd
