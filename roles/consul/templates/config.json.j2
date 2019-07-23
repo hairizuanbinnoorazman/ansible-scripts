@@ -5,5 +5,6 @@
   "log_level": "info",
   "ui": true,
   "client_addr": "0.0.0.0",
+  "bind": "{{ current_server_ip_address }}",
   "retry_join": ["{{ consul_server_ip_address.stdout }}"]
 }

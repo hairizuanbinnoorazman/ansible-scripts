@@ -1,0 +1,19 @@
+- name: Get IP address of first host in consul group
+  shell: hostname -i
+  register: consul_server_ip_address
+  run_once: true
+
+- name: Get IP address of first host in consul group
+  shell: hostname -i
+  register: current_server_ip_address
+
+- name: Generate a consul configuration to be run by systemd
+  template:
+    src: ../templates/config.json.j2
+    dest: /etc/consul.d/config.json
+
+- name: Ensure that consul is running
+  systemd:
+    daemon_reload: yes
+    state: restarted
+    name: consul
