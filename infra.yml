@@ -65,9 +65,10 @@
 - name: Install elasticsearch
   hosts: elasticsearch
   become: true
+  vars:
+    num_es_nodes: "{{ groups['elasticsearch'] | length }}"
 
   roles:
-    - java
     - elasticsearch
 
 - name: Install python 3
@@ -83,6 +84,22 @@
 
   roles:
     - etcd
+
+- name: Install Golang runtime
+  hosts: golang
+  become: true
+
+  roles:
+    - golang
+
+- name: Install Golang stackdriver debugger
+  hosts: debugger
+  become: true
+  become_user: hairizuannoorazman
+
+  roles:
+    - stackdriver-debugger
+
 
 - name: Install monitoring agents
   hosts: monitoring
