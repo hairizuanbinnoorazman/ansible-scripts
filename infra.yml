@@ -40,10 +40,9 @@
 - name: Install consul
   hosts: consul
   become: true
-  vars:
-    num_consul_hosts: "{{ groups['consul'] | length }}"
   roles:
-    - consul
+    - role: consul
+      consul_server: true
 
 - name: Install nats
   hosts: nats
