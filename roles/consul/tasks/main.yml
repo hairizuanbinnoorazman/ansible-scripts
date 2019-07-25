@@ -48,7 +48,7 @@
     dest: /etc/systemd/system/consul.service
 
 - include_tasks: server.yml
-  when: consul_server == true
+  when: consul_server is defined
 
-- include_tasks: member.yml
-  when: consul_member == true
+- include_tasks: agent.yml
+  when: consul_member is defined

@@ -1,0 +1,4 @@
+{
+  "data_dir": "/tmp/consul",
+  "retry_join": ["{{ groups['consul']|join('","') }}"]
+}

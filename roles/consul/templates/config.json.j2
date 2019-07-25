@@ -5,6 +5,5 @@
   "log_level": "info",
   "ui": true,
   "client_addr": "0.0.0.0",
-  "bind": "{{ inventory_hostname }}",
-  "retry_join": ["{{ groups['consul'][0] }}"]
+  "retry_join": ["{{ groups['consul'] | join('","') }}"]
 }

@@ -1,0 +1,10 @@
+- name: Generate a consul configuration to be run by systemd
+  template:
+    src: ../templates/client_config.json.j2
+    dest: /etc/consul.d/config.json
+
+- name: Ensure that consul is running
+  systemd:
+    daemon_reload: yes
+    state: restarted
+    name: consul
