@@ -1,0 +1,14 @@
+[Unit]
+Description=Kafka
+Requires=network.target
+After=network.target
+
+[Service]
+User=kafka
+Group=kafka
+ExecStart=/opt/{{ kafka_version }}/bin/kafka-server-start.sh /opt/{{ kafka_version }}/config/server.properties
+ExecStop=/opt/{{ kafka_version }}/bin/kafka-server-stop.sh
+WorkingDirectory=/var/lib/zookeeper
+
+[Install]
+WantedBy=default.target

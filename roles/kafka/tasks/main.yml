@@ -1,6 +1,49 @@
+- name: Ensure group "kafka" exists
+  group:
+    name: kafka
+    state: present
+
+- name: Add the user 'kafka'
+  user:
+    name: kafka
+    group: kafka
+    state: present
+
 - name: Unarchive kafka binary
   unarchive:
-    src: https://www-us.apache.org/dist/kafka/2.0.0/kafka_2.11-2.0.0.tgz
-    dest: /opt/kafka
+    src: https://archive.apache.org/dist/kafka/2.4.0/kafka_2.13-2.4.0.tgz
+    dest: /opt
     remote_src: yes
     mode: +x
+
+- name: Check that kafka logging directory is available for use
+  file:
+    path: /opt/{{ kafka_version }}/logs
+    owner: kafka
+    group: kafka
+    state: directory
+    recurse: true
+
+- name: Generate an kafka configuration file on the server
+  template:
+    src: ../templates/server.properties.j2
+    dest: /opt/{{ kafka_version }}/config/server.properties
+
+- name: Change file ownership, group and permissions
+  file:
+    path: /tmp
+    owner: kafka
+    group: kafka
+    mode: "0777"
+    recurse: true
+
+- name: Generate a kafka configuration to be run by systemd
+  template:
+    src: ../templates/kafka.service.j2
+    dest: /etc/systemd/system/kafka.service
+
+- name: Make sure kafka is running
+  systemd:
+    state: started
+    name: kafka
+    daemon_reload: true

@@ -1,7 +1,82 @@
-- name: Install zookeeper on server
-  apt:
-    name: "{{ packages }}"
-    update_cache: yes
-  vars:
-    packages:
-      - zookeeper
+- name: Ensure group "zookeeper" exists
+  group:
+    name: zookeeper
+    state: present
+
+- name: Add the user 'zookeeper'
+  user:
+    name: zookeeper
+    group: zookeeper
+    state: present
+
+- name: Check that zookeeper directory is available for use
+  file:
+    path: /opt
+    state: directory
+    recurse: true
+
+- name: Unarchive zookeeper binary
+  unarchive:
+    src: http://archive.apache.org/dist/zookeeper/zookeeper-3.5.6/{{ zookeeper_version }}.tar.gz
+    dest: /opt
+    remote_src: yes
+    group: zookeeper
+    owner: zookeeper
+
+- name: Check that zookeeper configuration directory is available for use
+  file:
+    path: /opt/{{ zookeeper_version }}
+    state: directory
+    recurse: true
+
+- name: Generate an zookeeper configuration file on the server
+  template:
+    src: ../templates/zoo.config.j2
+    dest: /opt/{{ zookeeper_version }}/conf/zookeeper.conf
+
+- name: Generate a zookeeper configuration to be run by systemd
+  template:
+    src: ../templates/zookeeper.service.j2
+    dest: /etc/systemd/system/zookeeper.service
+
+- name: Change file ownership, group and permissions
+  file:
+    path: /tmp
+    owner: zookeeper
+    group: zookeeper
+    mode: "0777"
+    recurse: true
+
+- name: Check that zookeeper configuration directory is available for use
+  file:
+    path: /opt/{{ zookeeper_version }}/logs
+    state: directory
+    recurse: true
+
+- name: Check that zookeeper configuration directory is available for use
+  file:
+    path: /var/lib/zookeeper
+    state: directory
+    recurse: true
+    owner: zookeeper
+    group: zookeeper
+
+- name: Check that zookeeper id is set
+  assert:
+    that:
+      - hostvars[inventory_hostname].zookeeper_id is defined
+
+- name: Inspect that correct zookeeper id is going to the right server
+  debug:
+    var: hostvars[inventory_hostname].zookeeper_id
+
+- name: Create required myid file
+  template:
+    src: ../templates/myid.j2
+    dest: /var/lib/zookeeper/myid
+
+- name: Make sure zookeeper is running
+  systemd:
+    state: started
+    name: zookeeper
+    daemon_reload: true
