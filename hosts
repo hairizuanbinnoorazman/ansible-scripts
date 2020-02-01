@@ -1,5 +1,4 @@
 [local]
-127.0.0.1
 
 [docker]
 
@@ -38,3 +37,8 @@
 [golang-web-app]
 
 [user-app]
+
+[zookeeper]
+
+[kafka]
+
