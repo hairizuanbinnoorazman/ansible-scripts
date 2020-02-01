@@ -100,7 +100,6 @@
   roles:
     - stackdriver-debugger
 
-
 - name: Install monitoring agents
   hosts: monitoring
   become: true
@@ -114,3 +113,19 @@
 
   roles:
     - stackdriver-logging
+
+- name: Install zookeeper
+  hosts: zookeeper
+  become: true
+
+  roles:
+    - java
+    - zookeeper
+
+- name: Install kafka
+  hosts: kafka
+  become: true
+
+  roles:
+    - java
+    - kafka
