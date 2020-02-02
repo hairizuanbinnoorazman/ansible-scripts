@@ -1,0 +1,94 @@
+- name: Ensure group "hadoop" exists
+  group:
+    name: hadoop
+    state: present
+
+- name: Add the user 'hadoop'
+  user:
+    name: hadoop
+    group: hadoop
+    state: present
+
+- name: Check that .ssh folder is available
+  file:
+    path: /home/hadoop/.ssh
+    owner: hadoop
+    group: hadoop
+    state: directory
+    recurse: true
+
+- name: Create ssh key for hadoop master
+  openssh_keypair:
+    path: /home/hadoop/.ssh/id_rsa
+    owner: hadoop
+    group: hadoop
+  when: inventory_hostname == groups["hadoop"][0]
+
+- name: Get ssh public key for hadoop master
+  shell: cat /home/hadoop/.ssh/id_rsa.pub
+  register: namenode_master_ssh_pub_key
+  when: inventory_hostname == groups["hadoop"][0]
+
+- name: Copy ssh public keys to datanodes
+  copy:
+    content: "{{ hostvars[groups['hadoop'][0]]['namenode_master_ssh_pub_key']['stdout'] }}"
+    dest: /home/hadoop/.ssh/authorized_keys
+
+- name: Download and unarchive hadoop binary
+  unarchive:
+    src: https://archive.apache.org/dist/hadoop/common/{{ hadoop_version }}/{{ hadoop_version }}.tar.gz
+    dest: /opt
+    remote_src: yes
+    group: hadoop
+    owner: hadoop
+
+# - name: Add required environment variables for hadoop
+#   template:
+#     src: ../templates/hadoop_env.j2
+#     dest: /etc/profile.d/hadoop.sh
+
+- name: Add required environment variables for hadoop
+  template:
+    src: ../templates/hadoop-env.sh.j2
+    dest: /opt/{{ hadoop_version }}/etc/hadoop/hadoop-env.sh
+    owner: hadoop
+    group: hadoop
+
+- name: Add required environment variables for hadoop
+  template:
+    src: ../templates/hadoop_env.j2
+    dest: /home/hadoop/.bashrc
+    owner: hadoop
+    group: hadoop
+
+- name: Check that hadoop logging directory is available for use
+  file:
+    path: /opt/{{ hadoop_version }}/logs
+    owner: hadoop
+    group: hadoop
+    state: directory
+    recurse: true
+
+- name: Check that hadoop namenode directory is available for use
+  file:
+    path: /opt/{{ hadoop_version }}/hdfs/namenode
+    owner: hadoop
+    group: hadoop
+    state: directory
+    recurse: true
+
+- name: Check that hadoop datanode directory is available for use
+  file:
+    path: /opt/{{ hadoop_version }}/hdfs/datanode
+    owner: hadoop
+    group: hadoop
+    state: directory
+    recurse: true
+
+- name: Run the commands for hadoop slave data nodes
+  include_tasks: slave.yml
+  when: inventory_hostname != groups["hadoop"][0]
+
+- name: Run the commands for hadoop master node
+  include_tasks: master.yml
+  when: inventory_hostname == groups["hadoop"][0]

@@ -1,0 +1,19 @@
+- name: Add core-site.xml configuration
+  template:
+    src: ../templates/core-site.xml.j2
+    dest: /opt/{{ hadoop_version }}/etc/hadoop/core-site.xml
+
+- name: Add hdfs-site.xml configuration
+  template:
+    src: ../templates/hdfs-site-slave.xml.j2
+    dest: /opt/{{ hadoop_version }}/etc/hadoop/hdf-site.xml
+
+- name: Add mapred-site.xml configuration
+  template:
+    src: ../templates/mapred-site.xml.j2
+    dest: /opt/{{ hadoop_version }}/etc/hadoop/mapred-site.xml
+
+- name: Add yarn-site.xml configuration
+  template:
+    src: ../templates/yarn-site.xml.j2
+    dest: /opt/{{ hadoop_version }}/etc/hadoop/yarn-site.xml

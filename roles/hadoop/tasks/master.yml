@@ -1,0 +1,57 @@
+- name: Add core-site.xml configuration
+  template:
+    src: ../templates/core-site.xml.j2
+    dest: /opt/{{ hadoop_version }}/etc/hadoop/core-site.xml
+
+- name: Add hdfs-site.xml configuration
+  template:
+    src: ../templates/hdfs-site-master.xml.j2
+    dest: /opt/{{ hadoop_version }}/etc/hadoop/hdfs-site.xml
+
+- name: Add mapred-site.xml configuration
+  template:
+    src: ../templates/mapred-site.xml.j2
+    dest: /opt/{{ hadoop_version }}/etc/hadoop/mapred-site.xml
+
+- name: Add yarn-site.xml configuration
+  template:
+    src: ../templates/yarn-site.xml.j2
+    dest: /opt/{{ hadoop_version }}/etc/hadoop/yarn-site.xml
+
+- name: Add workers file
+  template:
+    src: ../templates/workers.j2
+    dest: /opt/{{ hadoop_version }}/etc/hadoop/workers
+
+- name: Check for namenode folder
+  stat:
+    path: /opt/{{ hadoop_version }}/hdfs/namenode/current
+  register: namenode_folder
+
+- name: Format Hadoop namenode
+  environment:
+    JAVA_HOME: /usr
+  shell: /opt/{{ hadoop_version }}/bin/hdfs namenode -format
+  when: namenode_folder["stat"]["exists"] == false
+
+- name: Add hadoop systemd
+  template:
+    src: ../templates/hadoop.service.j2
+    dest: /etc/systemd/system/hadoop.service
+
+- name: Add yarn systemd
+  template:
+    src: ../templates/yarn.service.j2
+    dest: /etc/systemd/system/yarn.service
+
+- name: Make sure hadoop is running
+  systemd:
+    state: started
+    name: hadoop
+    daemon_reload: true
+
+- name: Make sure yarn is running
+  systemd:
+    state: started
+    name: yarn
+    daemon_reload: true
