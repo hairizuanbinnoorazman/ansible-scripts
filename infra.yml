@@ -127,4 +127,21 @@
 
   roles:
     - java
+    - zookeeper
     - kafka
+
+- name: Install hadoop
+  hosts: hadoop
+  become: true
+
+  roles:
+    - java
+    - hadoop
+
+- name: Install spark
+  hosts: spark
+  become: true
+
+  roles:
+    - java
+    - spark
