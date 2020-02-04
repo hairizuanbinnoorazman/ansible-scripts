@@ -1,2 +1,3 @@
-{{ groups["hadoop"][1] }}
-{{ groups["hadoop"][2] }}
+{% for host in groups["hadoop"][1:] %}
+{{ hostvars[host]["ansible_ssh_host"] }}
+{% endfor %}

@@ -69,22 +69,6 @@
     state: directory
     recurse: true
 
-- name: Check that hadoop namenode directory is available for use
-  file:
-    path: /opt/{{ hadoop_version }}/hdfs/namenode
-    owner: hadoop
-    group: hadoop
-    state: directory
-    recurse: true
-
-- name: Check that hadoop datanode directory is available for use
-  file:
-    path: /opt/{{ hadoop_version }}/hdfs/datanode
-    owner: hadoop
-    group: hadoop
-    state: directory
-    recurse: true
-
 - name: Run the commands for hadoop slave data nodes
   include_tasks: slave.yml
   when: inventory_hostname != groups["hadoop"][0]

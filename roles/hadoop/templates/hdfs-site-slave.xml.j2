@@ -1,11 +1,18 @@
 <configuration>
 <property>
  <name>dfs.replication</name>
- <value>3</value>
+ <value>1</value>
 </property>
 
 <property>
   <name>dfs.datanode.data.dir</name>
-  <value>/opt/{{ hadoop_version }}/hdfs/datanode</value>
+  <value>/home/hadoop/hdfs/datanode</value>
 </property>
+
+<property><name>dfs.namenode.rpc-bind-host</name><value>0.0.0.0</value></property>
+<property><name>dfs.namenode.servicerpc-bind-host</name><value>0.0.0.0</value></property>
+<property><name>dfs.namenode.http-bind-host</name><value>0.0.0.0</value></property>
+<property><name>dfs.namenode.https-bind-host</name><value>0.0.0.0</value></property>
+<property><name>dfs.client.use.datanode.hostname</name><value>true</value></property>
+<property><name>dfs.datanode.use.datanode.hostname</name><value>true</value></property>
 </configuration>

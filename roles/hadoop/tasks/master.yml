@@ -25,33 +25,18 @@
 
 - name: Check for namenode folder
   stat:
-    path: /opt/{{ hadoop_version }}/hdfs/namenode/current
+    path: /home/hadoop/hdfs/namenode/current
   register: namenode_folder
 
 - name: Format Hadoop namenode
   environment:
     JAVA_HOME: /usr
+  become: yes
+  become_user: hadoop
   shell: /opt/{{ hadoop_version }}/bin/hdfs namenode -format
   when: namenode_folder["stat"]["exists"] == false
 
-- name: Add hadoop systemd
-  template:
-    src: ../templates/hadoop.service.j2
-    dest: /etc/systemd/system/hadoop.service
-
-- name: Add yarn systemd
-  template:
-    src: ../templates/yarn.service.j2
-    dest: /etc/systemd/system/yarn.service
-
-- name: Make sure hadoop is running
-  systemd:
-    state: started
-    name: hadoop
-    daemon_reload: true
-
-- name: Make sure yarn is running
-  systemd:
-    state: started
-    name: yarn
-    daemon_reload: true
+- name: Start hadoop server
+  become: yes
+  become_user: hadoop
+  shell: /opt/{{ hadoop_version }}/sbin/start-dfs.sh

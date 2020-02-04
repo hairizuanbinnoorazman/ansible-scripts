@@ -6,7 +6,7 @@
 - name: Add hdfs-site.xml configuration
   template:
     src: ../templates/hdfs-site-slave.xml.j2
-    dest: /opt/{{ hadoop_version }}/etc/hadoop/hdf-site.xml
+    dest: /opt/{{ hadoop_version }}/etc/hadoop/hdfs-site.xml
 
 - name: Add mapred-site.xml configuration
   template:
