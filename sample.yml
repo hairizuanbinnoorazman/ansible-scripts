@@ -1,13 +1,34 @@
 - name: apply common configuration to all nodes
-  hosts: local
+  hosts: localhost
   connection: local
 
-  roles:
-    - sample
+  # roles:
+  #   - sample
+  tasks:
+    - debug:
+        var: hostvars
 
-- name: Testing values across plays
-  hosts: local
-  connection: local
+    - template:
+        src: zzz.yml
+        dest: zzz0.yml
 
-  roles:
-    - sample2
+    - shell: cat "zzz.yml"
+      register: miao
+
+    - stat:
+        path: ./roles/redis
+      register: zzz0_exists
+
+    - debug:
+        var: zzz0_exists["stat"]["exists"]
+      when: zzz0_exists["stat"]["exists"] == true
+
+    - copy:
+        content: "{{ miao.stdout }}"
+        dest: "zzz1.yml"
+# - name: Testing values across plays
+#   hosts: local
+#   connection: local
+
+#   roles:
+#     - sample2
