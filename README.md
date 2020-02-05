@@ -129,3 +129,11 @@ Notes: In the case where hosts use password to authenticate instead of ssh keys.
 - Install the following: sshpass
 - Use host `{host ip} ansible_connection=ssh ansible_ssh_user={user} ansible_ssh_pass={pw}`
 - If sudo need password... add an extra param to the cmd: `ansible_sudo_pass={pw}` to use password for authentication
+
+## Notes
+
+FYI... For roles such as the `hadoop` role, it requires to downgrade to non sudo user before running certain commnads. Unfortunately, normal ansible playbook commands won't work as expected here; need to use ANSIBLE_SSH_PIPELINING. Reason for this is as ansible requires all commands to be secure, so any command with non-sudo user would require to set the file permissions to 777 -> which is world-readable which is bad for security. Exact reason why Ansible ssh pipelining is available on ansible website.
+
+```bash
+ANSIBLE_SSH_PIPELINING=1 ansible-playbook  -i hosts infra.yml   
+```
