@@ -1,0 +1,23 @@
+- name: Ensure group "cassandra" exists
+  group:
+    name: cassandra
+    state: present
+
+- name: Add the user 'cassandra'
+  user:
+    name: cassandra
+    group: cassandra
+    state: present
+
+- name: Download and unarchive cassandra binary
+  unarchive:
+    src: https://archive.apache.org/dist/cassandra/{{ cassandra_version }}/apache-cassandra-{{ cassandra_version }}-bin.tar.gz
+    dest: /opt
+    remote_src: yes
+    group: cassandra
+    owner: cassandra
+
+- name: Start cassandra
+  become: yes
+  become_user: cassandra
+  shell: /opt/apache-cassandra-{{ cassandra_version }}/bin/cassandra
