@@ -42,22 +42,10 @@
     group: hadoop
     owner: hadoop
 
-# - name: Add required environment variables for hadoop
-#   template:
-#     src: ../templates/hadoop_env.j2
-#     dest: /etc/profile.d/hadoop.sh
-
 - name: Add required environment variables for hadoop
   template:
     src: ../templates/hadoop-env.sh.j2
     dest: /opt/{{ hadoop_version }}/etc/hadoop/hadoop-env.sh
-    owner: hadoop
-    group: hadoop
-
-- name: Add required environment variables for hadoop
-  template:
-    src: ../templates/hadoop_env.j2
-    dest: /home/hadoop/.bashrc
     owner: hadoop
     group: hadoop
 
