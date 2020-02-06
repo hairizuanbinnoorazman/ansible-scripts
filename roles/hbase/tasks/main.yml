@@ -1,0 +1,59 @@
+- name: Ensure group "hbase" exists
+  group:
+    name: hbase
+    state: present
+
+- name: Add the user 'hbase'
+  user:
+    name: hbase
+    group: hbase
+    state: present
+
+- name: Download and unarchive hadoop binary
+  unarchive:
+    src: https://archive.apache.org/dist/hbase/{{ hbase_version }}/hbase-{{ hbase_version }}-bin.tar.gz
+    dest: /opt
+    remote_src: yes
+    group: hbase
+    owner: hbase
+
+- name: Check that .ssh folder is available
+  file:
+    path: /home/hbase/.ssh
+    owner: hbase
+    group: hbase
+    state: directory
+    recurse: true
+
+- name: Create ssh key for hbase master
+  openssh_keypair:
+    path: /home/hbase/.ssh/id_rsa
+    owner: hbase
+    group: hbase
+  when: inventory_hostname == groups["hbase"][0]
+
+- name: Get ssh public key for hbase master
+  shell: cat /home/hbase/.ssh/id_rsa.pub
+  register: hbase_master_ssh_pub_key
+  when: inventory_hostname == groups["hbase"][0]
+
+- name: Copy ssh public keys to datanodes
+  copy:
+    content: "{{ hostvars[groups['hbase'][0]]['hbase_master_ssh_pub_key']['stdout'] }}"
+    dest: /home/hbase/.ssh/authorized_keys
+
+- name: Add hbase-env.sh configuration
+  template:
+    src: ../templates/hbase-env.sh.j2
+    dest: /opt/hbase-{{ hbase_version }}/conf/hbase-env.sh
+
+- name: Add hbase-site.xml configuration
+  template:
+    src: ../templates/hbase-site.xml.j2
+    dest: /opt/hbase-{{ hbase_version }}/conf/hbase-site.xml
+
+- name: Start hbase server from master
+  become: yes
+  become_user: hbase
+  shell: /opt/hbase-{{ hbase_version }}/bin/start-hbase.sh
+  when: inventory_hostname == groups["hbase"][0]
