@@ -32,12 +32,13 @@ def add_private_inventory(old_inventory, new_inventory):
     private_inventory = old_inventory
     data = new_inventory
     for host in data:
+        print(host)
         groups = data[host]['group_names']
         item = {
             "ansible_host": data[host]['internal_ip'],
             "ansible_user": data[host]['internal_user'],
             "ansible_ssh_private_key": data[host]['ansible_ssh_private_key'],
-            "ansible_ssh_common_args": '-o ProxyCommand="ssh -W %h:%p -q {}@{}"'.format(data[host]['internal_user'], data[host]['bastion_ip'])
+            "ansible_ssh_common_args": '-o ProxyCommand="ssh -W %h:%p -o StrictHostKeyChecking=no -q {}@{}"'.format(data[host]['internal_user'], data[host]['bastion_ip'])
         }
         for group in groups:
             if group not in private_inventory.keys():
@@ -80,7 +81,7 @@ def add(datacentre, public, input):
     else:
         inventory = add_private_inventory(old_inventory, new_inventory)
     with open(inventory_file_name, 'w') as outfile:
-        yaml.dump(inventory, outfile, default_flow_style=False)
+        yaml.safe_dump(inventory, outfile, default_flow_style=False, encoding='utf-8', allow_unicode=True)
 
 @cli.command()
 @click.option('--datacentre', default=False, type=str)
@@ -98,7 +99,7 @@ def remove(datacentre, public, groups, server):
     groups = groups.split(",")
     inventory = remove_inventory(old_inventory, groups, server)
     with open(inventory_file_name, 'w') as outfile:
-        yaml.dump(inventory, outfile, default_flow_style=False)
+        yaml.safe_dump(inventory, outfile, default_flow_style=False, encoding='utf-8', allow_unicode=True)
 
 if __name__ == '__main__':
     cli()
