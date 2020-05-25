@@ -1,0 +1,27 @@
+---
+
+- name: Create the webbasic user
+  user:
+    name: webbasic
+    create_home: no
+
+- name: Copy over binary from application store
+  shell: "gsutil cp gs://{{ application_store_bucket }}/web-basic/web-basic-{{ app_version }} /usr/local/bin/web-basic"
+
+- name: Ensure right permissions for binary
+  file:
+    path: /usr/local/bin/web-basic
+    owner: webbasic
+    group: root
+    mode: '0755'
+
+- name: Generate a basic app web application systemctl configuration to be run by systemd
+  template:
+    src: ../templates/web-basic.service.j2
+    dest: /etc/systemd/system/web-basic.service
+
+- name: Ensure that user app is running
+  systemd:
+    daemon_reload: yes
+    state: restarted
+    name: web-basic

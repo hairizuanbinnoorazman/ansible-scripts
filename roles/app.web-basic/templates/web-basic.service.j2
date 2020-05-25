@@ -1,0 +1,10 @@
+[Unit]
+Description=Web - Basic Golang Application
+
+[Service]
+ExecStart=/usr/local/bin/web-basic
+User=webbasic
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
