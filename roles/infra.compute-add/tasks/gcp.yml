@@ -1,0 +1,73 @@
+---
+
+- name: create a network
+  gcp_compute_network:
+    name: "{{ datacentre }}"
+    project: "{{ gcp_project }}"
+    auth_kind: "{{ gcp_cred_kind }}"
+    state: present
+  register: network
+
+- name: Create service account for server
+  gcp_iam_service_account:
+    name: "{{ service_acct }}@{{ gcp_project }}.iam.gserviceaccount.com"
+    display_name: "{{ service_acct_display }}"
+    project: "{{ gcp_project }}"
+    auth_kind: "{{ gcp_cred_kind }}"
+    scopes: "{{ scopes }}"
+    state: present
+
+- name: Create GCP Instance
+  gcp_compute_instance:
+    status: RUNNING
+    state: present
+    name: "{{ server_name }}"
+    machine_type: "{{ machine_type }}"
+    zone: "{{ zone }}"
+    project: "{{ gcp_project }}"
+    auth_kind: "{{ gcp_cred_kind }}"
+    tags:
+      items:
+        "{{ network_tags }}"
+    network_interfaces:
+      - network: "{{ network }}"
+        access_configs:
+        - name: External NAT
+          type: ONE_TO_ONE_NAT
+    service_accounts:
+      - email: "{{ service_acct }}@{{ gcp_project }}.iam.gserviceaccount.com"
+        scopes:
+          - https://www.googleapis.com/auth/cloud-platform
+    disks:
+      - auto_delete: 'true'
+        boot: 'true'
+        initialize_params:
+          source_image: projects/debian-cloud/global/images/debian-9-stretch-v20190729
+          disk_size_gb: 10
+  register: server
+
+- name: Add host
+  add_host:
+    name: "{{ server_name }}"
+    ansible_host: "{{ server['networkInterfaces'][0]['networkIP'] }}"
+    ansible_user: "{{ ansible_user }}"
+    ansible_ssh_private_key: "{{ ansible_ssh_private_key_file }}"
+    internal_user: "{{ ansible_user }}"
+    internal_ip: "{{ server['networkInterfaces'][0]['networkIP'] }}"
+    bastion_ip: "{{ bastion_ip_address }}"
+    ansible_ssh_common_args: "-o ProxyCommand=\"ssh -W %h:%p -o StrictHostKeyChecking=no -q {{ ansible_user }}@{{ bastion_ip_address }}\""
+    groups:
+      "{{ server_groups }}"
+
+- name: Print out inventory to be picked up by inventory manager
+  copy:
+    content: '{{ hostvars }}'
+    dest: ./output_inventory
+
+- name: Add to private inventory
+  shell: "python inventory_manager.py add --datacentre={{ datacentre }} --public=False --input=output_inventory"
+
+- name: Remove temporary inventory file
+  file:
+    path: ./output_inventory
+    state: absent
