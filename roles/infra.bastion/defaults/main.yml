@@ -1,0 +1,14 @@
+---
+
+# GCP Specific Details
+zone: "us-central1-a"
+region: "us-central1"
+network_tags:
+  - http-server
+machine_type: f1-micro
+
+# For all
+datacentre: default
+server_name: default-server
+server_groups:
+  - default

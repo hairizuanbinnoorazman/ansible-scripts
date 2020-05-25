@@ -1,0 +1,139 @@
+---
+
+- name: Ensure network exists
+  gcp_compute_network:
+    name: "{{ datacentre }}"
+    project: "{{ gcp_project }}"
+    auth_kind: "{{ gcp_cred_kind }}"
+    auto_create_subnetworks: yes
+    state: present
+  register: network
+
+- name: Create ssh firewall rule
+  gcp_compute_firewall:
+    name: "{{ datacentre }}-allow-ssh"
+    project: "{{ gcp_project }}"
+    auth_kind: "{{ gcp_cred_kind }}"
+    network: "{{ network }}"
+    allowed:
+    - ip_protocol: tcp
+      ports:
+      - '22'
+    direction: INGRESS
+    target_tags:
+      - "{{ datacentre }}-allow-ssh"
+    source_ranges:
+      - "0.0.0.0/0"
+    state: present
+
+- name: Create http firewall rule
+  gcp_compute_firewall:
+    name: "{{ datacentre }}-allow-http"
+    project: "{{ gcp_project }}"
+    auth_kind: "{{ gcp_cred_kind }}"
+    network: "{{ network }}"
+    allowed:
+    - ip_protocol: tcp
+      ports:
+      - '80'
+    direction: INGRESS
+    target_tags:
+      - "{{ datacentre }}-allow-http"
+    source_ranges:
+      - "0.0.0.0/0"
+    state: present
+
+- name: Create https firewall rule
+  gcp_compute_firewall:
+    name: "{{ datacentre }}-allow-https"
+    project: "{{ gcp_project }}"
+    auth_kind: "{{ gcp_cred_kind }}"
+    network: "{{ network }}"
+    allowed:
+    - ip_protocol: tcp
+      ports:
+      - '443'
+    direction: INGRESS
+    target_tags:
+      - "{{ datacentre }}-allow-https"
+    source_ranges:
+      - "0.0.0.0/0"
+    state: present
+
+- name: Create internal rule
+  gcp_compute_firewall:
+    name: "{{ datacentre }}-allow-internal"
+    project: "{{ gcp_project }}"
+    auth_kind: "{{ gcp_cred_kind }}"
+    network: "{{ network }}"
+    allowed:
+    - ip_protocol: tcp
+      ports:
+      - '0-65535'
+    - ip_protocol: udp
+      ports:
+      - '0-65535'
+    - ip_protocol: icmp
+    direction: INGRESS
+    source_tags:
+      - "{{ datacentre }}-allow-internal"
+    state: present
+
+- name: Create GCP Instance
+  gcp_compute_instance:
+    status: RUNNING
+    state: present
+    name: "{{ server_name }}"
+    machine_type: "{{ machine_type }}"
+    zone: "{{ zone }}"
+    project: "{{ gcp_project }}"
+    auth_kind: "{{ gcp_cred_kind }}"
+    tags:
+      items:
+        - "{{ datacentre }}-allow-ssh"
+        - "{{ datacentre }}-allow-internal"
+    network_interfaces:
+      - network: "{{ network }}"
+        access_configs:
+        - name: External NAT
+          type: ONE_TO_ONE_NAT
+    disks:
+      - auto_delete: 'true'
+        boot: 'true'
+        initialize_params:
+          source_image: projects/debian-cloud/global/images/debian-9-stretch-v20190729
+          disk_size_gb: 10
+  register: server
+
+- name: Add host
+  add_host:
+    name: "{{ server_name }}"
+    ansible_host: "{{ server['networkInterfaces'][0]['accessConfigs'][0]['natIP'] }}"
+    ansible_user: "{{ ansible_user }}"
+    ansible_ssh_private_key: "{{ ansible_ssh_private_key_file }}"
+    internal_user: "{{ ansible_user }}"
+    internal_ip: "{{ server['networkInterfaces'][0]['networkIP'] }}"
+    bastion_ip: "{{ server['networkInterfaces'][0]['accessConfigs'][0]['natIP'] }}"
+    ansible_ssh_common_args: "-o StrictHostKeyChecking=no -o ProxyCommand=\"ssh -W %h:%p -o StrictHostKeyChecking=no -q {{ ansible_user }}@{{ server['networkInterfaces'][0]['accessConfigs'][0]['natIP'] }}\""
+    groups:
+      "{{ server_groups }}"
+
+- name: Print out inventory to be picked up by inventory manager
+  copy:
+    content: '{{ hostvars }}'
+    dest: ./output_inventory
+
+- name: Set Bastion IP Address
+  set_fact:
+    bastion_ip_address: "{{ server['networkInterfaces'][0]['accessConfigs'][0]['natIP'] }}"
+
+- name: Add to public inventory
+  shell: "python inventory_manager.py add --datacentre={{ datacentre }} --public=True --input=output_inventory"
+
+- name: Add to private inventory
+  shell: "python inventory_manager.py add --datacentre={{ datacentre }} --public=False --input=output_inventory"
+
+- name: Remove temporary inventory file
+  file:
+    path: ./output_inventory
+    state: absent

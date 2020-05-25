@@ -1,0 +1,5 @@
+---
+
+- name: Create GCP Instance
+  include: gcp.yml
+  when: cloud_provider == "google"
