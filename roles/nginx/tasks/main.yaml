@@ -12,7 +12,13 @@
     dest: /etc/nginx/sites-available/api-nginx.conf
 
 - name: Create symlink of the configuration on the sites-enabled folder
-  shell: ln -s /etc/nginx/sites-available/api-nginx.conf /etc/nginx/sites-enabled/
+  file:
+    src: /etc/nginx/sites-available/api-nginx.conf
+    dest: /etc/nginx/sites-enabled/api-nginx.conf
+    state: link
 
 - name: Reload the nginx configuration
-  shell: systemctl reload nginx
+  systemd:
+    state: restarted
+    name: nginx
+
