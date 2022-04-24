@@ -7,7 +7,7 @@
   register: host_ip_addr
 
 - name: Get manipulated string for combining to add to etcd config
-  shell: echo $(hostname)=$(hostname -i):2380
+  shell: echo $(hostname)=http:\/\/$(hostname -i):2380
   register: etcd_node_host_port
 
 - name: Get full etcd peer list as string
@@ -35,6 +35,22 @@
 - name: Create the etcd configuration folder if it doesn't exist
   file:
     path: /etc/etcd
+    state: directory
+    mode: "0755"
+    owner: etcd
+    group: etcd
+
+- name: Create the etcd data directory if it doesn't exists
+  file:
+    path: /etc/etcd/{{ hostname.stdout }}.etcd
+    state: directory
+    mode: "0755"
+    owner: etcd
+    group: etcd
+
+- name: Create the etcd wal directory if it doesn't exists
+  file:
+    path: /etc/etcd/wal
     state: directory
     mode: "0755"
     owner: etcd
