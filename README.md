@@ -79,6 +79,14 @@ Installing the various cloud providers (Currently using other cli tools in order
 
 - [gcloud](https://cloud.google.com/sdk/docs/quickstart-macos)
 
+Setting up a full blown set of useful services?
+
+ansible.json is a service account file from a GCP project
+
+```bash
+GOOGLE_APPLICATION_CREDENTIALS=ansible.json ansible-playbook playbook-dc-create.yml -e '{"gcp_project": "XXXX", "gcp_cred_kind": "application","ansible_user":"XXX","ansible_ssh_private_key_file":"~/.ssh/google_compute_engine"}'
+```
+
 # Examples
 
 ## Setting up docker on a debian machine on Google VM
@@ -88,7 +96,7 @@ It is possible to just go for a container optimized google VM but let's just com
 ```bash
 # Create instance
 # It might be necessary to add --project and other flags if you're working across projects
-gcloud beta compute instances create instance-2 --zone=us-central1-c --machine-type=n1-standard-1 --subnet=default --tags=http-server,https-server --image=debian-9-stretch-v20180911 --image-project=debian-cloud --boot-disk-size=10GB --boot-disk-type=pd-standard --boot-disk-device-name=instance-2
+gcloud beta compute instances create instance-3 --zone=us-central1-c --machine-type=e2-medium --subnet=default --tags=http-server,https-server --image=projects/debian-cloud/global/images/debian-10-buster-v20220406 --image-project=debian-cloud --boot-disk-size=10GB --boot-disk-type=pd-standard --boot-disk-device-name=instance-3
 
 # Another option is to create a ubuntu instance instead
 gcloud beta compute instances create instance-1 --zone=us-central1-c --machine-type=n1-standard-1 --subnet=default --tags=http-server,https-server --image=ubuntu-1604-xenial-v20180912 --image-project=ubuntu-os-cloud --boot-disk-size=10GB --boot-disk-type=pd-standard --boot-disk-device-name=instance-1
