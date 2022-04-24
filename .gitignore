@@ -1,2 +1,3 @@
 ansible_env
 .vscode
+ansible.json
