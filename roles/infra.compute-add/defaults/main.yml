@@ -6,7 +6,7 @@ region: "us-central1"
 network_tags:
   - http-server
 machine_type: f1-micro
-expose: false
+expose: no
 
 # For all
 bastion_ip_address: 0.0.0.0

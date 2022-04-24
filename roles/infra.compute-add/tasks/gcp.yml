@@ -34,6 +34,7 @@
         access_configs:
         - name: External NAT
           type: ONE_TO_ONE_NAT
+          set_public_ptr: "{{ expose }}"
     service_accounts:
       - email: "{{ service_acct }}@{{ gcp_project }}.iam.gserviceaccount.com"
         scopes:
@@ -42,7 +43,7 @@
       - auto_delete: 'true'
         boot: 'true'
         initialize_params:
-          source_image: projects/debian-cloud/global/images/debian-9-stretch-v20190729
+          source_image: projects/debian-cloud/global/images/debian-10-buster-v20220406
           disk_size_gb: 10
   register: server
 
