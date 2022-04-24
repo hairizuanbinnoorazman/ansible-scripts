@@ -12,8 +12,9 @@
     server_name: bastion
     server_groups:
       - infra
-    machine_type: f1-micro
+    machine_type: e2-micro
     cloud_provider: google
+    expose: yes
   roles:
     - role: infra.bastion
 
@@ -24,13 +25,14 @@
     cloud_provider: google
     server_groups:
       - fw
-    machine_type: f1-micro
+    machine_type: e2-micro
     network_tags:
       - "{{ datacentre }}-allow-internal"
       - "{{ datacentre }}-allow-http"
     bastion_ip_address: "{{ bastion_ip_address }}"
     service_acct: web-basic
     service_acct_display: Service account for web basic application
+    expose: yes
     scopes: []
   roles:
     - role: infra.compute-add
@@ -38,5 +40,34 @@
 - hosts: fw
   become: true
   roles:
-    # - role: nginx
-    - role: app.web-basic
+    - role: nginx
+    # - role: app.web-basic
+
+- hosts: localhost
+  vars:
+    datacentre: "{{ datacentre }}"
+    cloud_provider: google
+    server_groups:
+      - etcd
+    machine_type: e2-micro
+    network_tags: []
+    bastion_ip_address: "{{ bastion_ip_address }}"
+    service_acct: etcd-basic
+    service_acct_display: Service account for etcd
+    expose: no
+    scopes: []
+  tasks:
+    - name: Create etcd nodes
+      include_role:
+        name: infra.compute-add
+      vars:
+        server_name: "{{ item }}"
+      with_items:
+        - etcd-1
+        - etcd-2
+        - etcd-3
+
+- hosts: etcd
+  become: true
+  roles:
+    - role: etcd
