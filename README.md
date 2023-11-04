@@ -1,5 +1,7 @@
 # Scripts for automating server provision
 
+IMPORTANT: WE CANT COMPLETELY RELY ON PURE ANSIBLE DUE TO LACK OF PROPER SUPPORT FOR IT IN GCP ANSIBLE PLUGIN - E.G. NO CLOUD NAT/CLOUD RUN. SEEING THIS, WE HAVE TO RESORT TO USING SOMETHING LIKE TERRAFORM TO PROVISION AND MAYBE USE ANSIBLE ONLY FOR CONFIGURATION WORK.
+
 Contains some of the common commands to be able to provisions servers rather than ssh-ing in and run the commands over and over again across multiple servers. Here is a list of some of the possible things that can be setup from the following ansible scripts:
 
 A few additional notes:
