@@ -1,5 +1,8 @@
 ---
 
+# Following playbook to be deprecated
+# We will move provisioning step to utilize terraform instead
+
 - hosts: localhost
   tasks:
     - name: Set Datacentre name
@@ -18,40 +21,37 @@
   roles:
     - role: infra.bastion
 
+# - hosts: localhost
+#   vars:
+#     datacentre: "{{ datacentre }}"
+#     server_name: zzaa
+#     cloud_provider: google
+#     server_groups:
+#       - fw
+#     machine_type: e2-micro
+#     network_tags:
+#       - "{{ datacentre }}-allow-internal"
+#       - "{{ datacentre }}-allow-http"
+#     bastion_ip_address: "{{ bastion_ip_address }}"
+#     service_acct: web-basic
+#     service_acct_display: Service account for web basic application
+#     expose: yes
+#     scopes: []
+#   roles:
+#     - role: infra.compute-add
+
+# - hosts: fw
+#   become: true
+#   roles:
+#     - role: nginx
+#     # - role: app.web-basic
+
 - hosts: localhost
   vars:
     datacentre: "{{ datacentre }}"
-    server_name: zzaa
     cloud_provider: google
-    server_groups:
-      - fw
-    machine_type: e2-micro
-    network_tags:
-      - "{{ datacentre }}-allow-internal"
-      - "{{ datacentre }}-allow-http"
-    bastion_ip_address: "{{ bastion_ip_address }}"
-    service_acct: web-basic
-    service_acct_display: Service account for web basic application
-    expose: yes
-    scopes: []
-  roles:
-    - role: infra.compute-add
-
-- hosts: fw
-  become: true
-  roles:
-    - role: nginx
-    # - role: app.web-basic
-
-- hosts: localhost
-  vars:
-    datacentre: "{{ datacentre }}"
-    cloud_provider: google
-    server_groups:
-      - etcd
     machine_type: e2-micro
     network_tags: []
-    bastion_ip_address: "{{ bastion_ip_address }}"
     service_acct: etcd-basic
     service_acct_display: Service account for etcd
     expose: no
@@ -67,7 +67,9 @@
         - etcd-2
         - etcd-3
 
-- hosts: etcd
-  become: true
-  roles:
-    - role: etcd
+# - hosts: etcd
+#   become: true
+#   roles:
+#     - role: etcd
+
+
