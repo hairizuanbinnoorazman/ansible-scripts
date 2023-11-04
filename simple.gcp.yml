@@ -1,0 +1,13 @@
+plugin: gcp_compute
+auth_kind: application
+zones: # populate inventory with instances in these regions
+  - us-central1-a
+projects:
+  - xxx
+groups:
+  docker: "'docker' in name"
+  etcd: "'etcd' in name"
+hostnames:
+  - name
+compose:
+  ansible_host: networkInterfaces[0].networkIP
